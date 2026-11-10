@@ -110,28 +110,156 @@ You can add more tests in `tests/test_recommender.py`.
 
 ## Sample Recommendation Output
 
-Paste a sample of your recommender's output here as a text block so a reader can see what it produces:
+Output of `python -m src.main` (top 5 per profile). The first three are typical listeners; the last four are adversarial profiles built to try to trick the scoring logic.
+
+### Standard profiles
+
+**High-Energy Pop**
 
 ```
-# e.g.:
-# User profile: genre=indie, mood=chill, energy=low
-# Recommendations:
-#   1. ...
-#   2. ...
-#   3. ...
+Profile: High-Energy Pop
+Prefs:   {'favorite_genre': 'pop', 'favorite_mood': 'happy', 'target_energy': 0.85, 'likes_acoustic': False}
+1. Sunrise City (pop, happy, energy 0.82) - Score: 6.20
+   Because: genre match (+2.0); mood match (+1.5); energy 0.82 vs target 0.85 (+1.88); acoustic fit (+0.82)
+2. Gym Hero (pop, intense, energy 0.93) - Score: 4.63
+   Because: genre match (+2.0); energy 0.93 vs target 0.85 (+1.68); acoustic fit (+0.95)
+3. Rooftop Lights (indie pop, happy, energy 0.76) - Score: 3.79
+   Because: mood match (+1.5); energy 0.76 vs target 0.85 (+1.64); acoustic fit (+0.65)
+4. Concrete Verses (hip hop, energetic, energy 0.80) - Score: 2.68
+   Because: energy 0.80 vs target 0.85 (+1.80); acoustic fit (+0.88)
+5. Storm Runner (rock, intense, energy 0.91) - Score: 2.66
+   Because: energy 0.91 vs target 0.85 (+1.76); acoustic fit (+0.90)
 ```
 
-**Screenshot or video** *(optional)*: <!-- Insert a screenshot or demo video link here -->
+**Chill Lofi**
+
+```
+Profile: Chill Lofi
+Prefs:   {'favorite_genre': 'lofi', 'favorite_mood': 'chill', 'target_energy': 0.4, 'likes_acoustic': True}
+1. Library Rain (lofi, chill, energy 0.35) - Score: 6.16
+   Because: genre match (+2.0); mood match (+1.5); energy 0.35 vs target 0.40 (+1.80); acoustic fit (+0.86)
+2. Midnight Coding (lofi, chill, energy 0.42) - Score: 6.13
+   Because: genre match (+2.0); mood match (+1.5); energy 0.42 vs target 0.40 (+1.92); acoustic fit (+0.71)
+3. Focus Flow (lofi, focused, energy 0.40) - Score: 4.78
+   Because: genre match (+2.0); energy 0.40 vs target 0.40 (+2.00); acoustic fit (+0.78)
+4. Spacewalk Thoughts (ambient, chill, energy 0.28) - Score: 3.94
+   Because: mood match (+1.5); energy 0.28 vs target 0.40 (+1.52); acoustic fit (+0.92)
+5. Coffee Shop Stories (jazz, relaxed, energy 0.37) - Score: 2.77
+   Because: energy 0.37 vs target 0.40 (+1.88); acoustic fit (+0.89)
+```
+
+**Deep Intense Rock**
+
+```
+Profile: Deep Intense Rock
+Prefs:   {'favorite_genre': 'rock', 'favorite_mood': 'intense', 'target_energy': 0.9, 'likes_acoustic': False}
+1. Storm Runner (rock, intense, energy 0.91) - Score: 6.36
+   Because: genre match (+2.0); mood match (+1.5); energy 0.91 vs target 0.90 (+1.96); acoustic fit (+0.90)
+2. Gym Hero (pop, intense, energy 0.93) - Score: 4.33
+   Because: mood match (+1.5); energy 0.93 vs target 0.90 (+1.88); acoustic fit (+0.95)
+3. Neon Euphoria (edm, euphoric, energy 0.95) - Score: 2.78
+   Because: energy 0.95 vs target 0.90 (+1.80); acoustic fit (+0.98)
+4. Iron Furnace (metal, angry, energy 0.97) - Score: 2.69
+   Because: energy 0.97 vs target 0.90 (+1.72); acoustic fit (+0.97)
+5. Sunrise City (pop, happy, energy 0.82) - Score: 2.50
+   Because: energy 0.82 vs target 0.90 (+1.68); acoustic fit (+0.82)
+```
+
+### Adversarial / edge-case profiles
+
+**Conflicted: Sad but High-Energy**
+
+```
+Profile: Conflicted: Sad but High-Energy
+Prefs:   {'favorite_genre': 'classical', 'favorite_mood': 'sad', 'target_energy': 0.9, 'likes_acoustic': False}
+1. Nocturne in Grey (classical, sad, energy 0.15) - Score: 3.53
+   Because: genre match (+2.0); mood match (+1.5); energy 0.15 vs target 0.90 (+0.00); acoustic fit (+0.03)
+2. Storm Runner (rock, intense, energy 0.91) - Score: 2.86
+   Because: energy 0.91 vs target 0.90 (+1.96); acoustic fit (+0.90)
+3. Gym Hero (pop, intense, energy 0.93) - Score: 2.83
+   Because: energy 0.93 vs target 0.90 (+1.88); acoustic fit (+0.95)
+4. Neon Euphoria (edm, euphoric, energy 0.95) - Score: 2.78
+   Because: energy 0.95 vs target 0.90 (+1.80); acoustic fit (+0.98)
+5. Iron Furnace (metal, angry, energy 0.97) - Score: 2.69
+   Because: energy 0.97 vs target 0.90 (+1.72); acoustic fit (+0.97)
+```
+
+**Ghost Genre: K-Pop / Dreamy**
+
+```
+Profile: Ghost Genre: K-Pop / Dreamy
+Prefs:   {'favorite_genre': 'k-pop', 'favorite_mood': 'dreamy', 'target_energy': 0.6, 'likes_acoustic': True}
+1. Porch Light Memories (country, nostalgic, energy 0.52) - Score: 2.33
+   Because: energy 0.52 vs target 0.60 (+1.68); acoustic fit (+0.65)
+2. Midnight Coding (lofi, chill, energy 0.42) - Score: 1.99
+   Because: energy 0.42 vs target 0.60 (+1.28); acoustic fit (+0.71)
+3. Focus Flow (lofi, focused, energy 0.40) - Score: 1.98
+   Because: energy 0.40 vs target 0.60 (+1.20); acoustic fit (+0.78)
+4. Coffee Shop Stories (jazz, relaxed, energy 0.37) - Score: 1.97
+   Because: energy 0.37 vs target 0.60 (+1.08); acoustic fit (+0.89)
+5. Library Rain (lofi, chill, energy 0.35) - Score: 1.86
+   Because: energy 0.35 vs target 0.60 (+1.00); acoustic fit (+0.86)
+```
+
+**Out-of-Range Energy (1.5)**
+
+```
+Profile: Out-of-Range Energy (1.5)
+Prefs:   {'favorite_genre': 'edm', 'favorite_mood': 'euphoric', 'target_energy': 1.5, 'likes_acoustic': False}
+1. Neon Euphoria (edm, euphoric, energy 0.95) - Score: 4.48
+   Because: genre match (+2.0); mood match (+1.5); energy 0.95 vs target 1.50 (+0.00); acoustic fit (+0.98)
+2. Iron Furnace (metal, angry, energy 0.97) - Score: 0.97
+   Because: energy 0.97 vs target 1.50 (+0.00); acoustic fit (+0.97)
+3. Gym Hero (pop, intense, energy 0.93) - Score: 0.95
+   Because: energy 0.93 vs target 1.50 (+0.00); acoustic fit (+0.95)
+4. Storm Runner (rock, intense, energy 0.91) - Score: 0.90
+   Because: energy 0.91 vs target 1.50 (+0.00); acoustic fit (+0.90)
+5. Concrete Verses (hip hop, energetic, energy 0.80) - Score: 0.88
+   Because: energy 0.80 vs target 1.50 (+0.00); acoustic fit (+0.88)
+```
+
+**Messy Input: 'LOFI' / 'Chill', no acoustic key**
+
+```
+Profile: Messy Input: 'LOFI' / 'Chill', no acoustic key
+Prefs:   {'favorite_genre': 'LOFI', 'favorite_mood': 'Chill', 'target_energy': 0.4}
+1. Midnight Coding (lofi, chill, energy 0.42) - Score: 5.71
+   Because: genre match (+2.0); mood match (+1.5); energy 0.42 vs target 0.40 (+1.92); acoustic fit (+0.29)
+2. Library Rain (lofi, chill, energy 0.35) - Score: 5.44
+   Because: genre match (+2.0); mood match (+1.5); energy 0.35 vs target 0.40 (+1.80); acoustic fit (+0.14)
+3. Focus Flow (lofi, focused, energy 0.40) - Score: 4.22
+   Because: genre match (+2.0); energy 0.40 vs target 0.40 (+2.00); acoustic fit (+0.22)
+4. Spacewalk Thoughts (ambient, chill, energy 0.28) - Score: 3.10
+   Because: mood match (+1.5); energy 0.28 vs target 0.40 (+1.52); acoustic fit (+0.08)
+5. Velvet Promise (r&b, romantic, energy 0.48) - Score: 2.36
+   Because: energy 0.48 vs target 0.40 (+1.68); acoustic fit (+0.68)
+```
 
 ---
 
 ## Experiments You Tried
 
-Use this section to document the experiments you ran. For example:
+### Weight shift: halve genre, double energy
 
-- What happened when you changed the weight on genre from 2.0 to 0.5
-- What happened when you added tempo or valence to the score
-- How did your system behave for different types of users
+**Change:** `GENRE_WEIGHT` 2.0 → 1.0 and `ENERGY_WEIGHT` 2.0 → 4.0 (mood 1.5 and acoustic 1.0 unchanged). I ran this temporarily by overriding the constants, then kept the original Strategy B weights in `recommender.py`.
+
+**Math check:** the maximum score becomes 1.0 + 1.5 + 4.0 + 1.0 = **7.5**. A perfect song (lofi, chill, energy 0.40, acousticness 1.0) scored exactly 7.5 for the Chill Lofi profile, and every score across all 7 profiles and 18 songs stayed between 0 and 7.5, so the formula is still valid.
+
+**Top 5, before → after:**
+
+| Profile | Before (Strategy B) | After (genre 1.0, energy 4.0) |
+|---|---|---|
+| High-Energy Pop | Sunrise City, Gym Hero, Rooftop Lights, Concrete Verses, Storm Runner | Sunrise City, **Rooftop Lights, Gym Hero**, Concrete Verses, Storm Runner |
+| Chill Lofi | Library Rain, Midnight Coding, Focus Flow, Spacewalk Thoughts, Coffee Shop Stories | **Midnight Coding, Library Rain**, Focus Flow, Spacewalk Thoughts, Coffee Shop Stories |
+| Deep Intense Rock | Storm Runner, Gym Hero, Neon Euphoria, Iron Furnace, Sunrise City | unchanged |
+| Conflicted: Sad but High-Energy | **Nocturne in Grey**, Storm Runner, Gym Hero, Neon Euphoria, Iron Furnace | Storm Runner, Gym Hero, Neon Euphoria, Iron Furnace, **Sunrise City** (Nocturne in Grey drops out) |
+
+**More accurate or just different?** Mostly just different. The top song stayed the same for 3 of the 4 profiles, and the changes were mostly neighbors swapping places:
+- **High-Energy Pop:** Rooftop Lights (indie pop, *happy*) moved above Gym Hero (pop, *intense*). That arguably fits a happy-pop listener better.
+- **Chill Lofi:** Midnight Coding overtook Library Rain because its energy is closer to 0.40.
+- **Conflicted profile:** the sad classical song disappeared entirely, and the list became generic loud tracks. With energy worth 4.0, the system now ignores the listener's genre and mood whenever they disagree with their energy.
+
+I kept the original weights because the experiment traded one bias (labels beat sound) for the opposite one (energy beats everything).
 
 ---
 
